@@ -67,7 +67,7 @@ Now, let's build the "node" version of our weather app from last week (without t
 we're going to set up the request:
 
     var options = {
-    	url: 'https://api.forecast.io/forecast/885b6e5cd42ff19b9e2938503ab75c4b/40.7056,-73.978',
+    	url: 'https://api.forecast.io/forecast/YOUR_API_KEY_HERE/40.7056,-73.978',
     	method: 'GET'
     };
     
