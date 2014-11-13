@@ -47,7 +47,7 @@ You in? If so, there are some things we need to install, including "node" and th
 
     sudo apt-get update
     sudo apt-get install nodejs
-    sudo apt-get-install npm
+    sudo apt-get install npm
     sudo ln -s /usr/bin/nodejs /usr/bin/node
 
 Finally, we're using some pre-programmed javascript to include.
@@ -81,8 +81,6 @@ OK! Now we need to set up the code to get the weather data.
     		var weather = JSON.parse(body);
     		
     		console.log(weather);
-    		
-    		
     		
     		// ... and above here
     	} else {
