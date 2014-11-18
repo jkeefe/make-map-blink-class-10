@@ -1,5 +1,7 @@
 #Computing in the Cloud
 
+_Note: This guide makes slightly more sense when I'm teaching it. If you have questions or spot gaps, feel free to reach out at john (at) johnkeefe.net_
+
 First a quick discussion about EC2 v S3.
 
 **S3** holds static files, such as html and js files. If you use it as a web hosting place, which is common, you just want to make sure all the files are public.
@@ -11,9 +13,9 @@ So that poses a problem when you have API keys!
 ##Fire Up Your Cloud Computer
 
 - go to [http://aws.amazon.com](http://aws.amazon.com)
-- Sign up with your Amazon account
-- What we want is your AWS Management Console
-- If you don't see "N. Virginia" next to your name, change it to that
+- Sign up with your Amazon account. You will be asked for your credit card, and spending money is possible here. But today's steps involve spinning up a "micro" server which will run a year for free. You'll want to shut it down to avoid being charged in a year!
+- Go to the AWS Management Console
+- If you don't see "N. Virginia" next to your name at the top, change it to that
 - Pick EC2
 - Launch an instance!
 - Pick Ubuntu
@@ -39,9 +41,10 @@ Need to grab the key and put it in our hand
     
 ##Log into your new computer and set things up!
 
-Now we can log in. You get the IP address by clicking on the EC2 instance in your Amazon console at aws.amazon.com:
+Now we can log in. You get the IP address by clicking on the EC2 instance in your Amazon console at aws.amazon.com and looking at the "Public IP":
 
-    ssh ubuntu@<ip address of instance>
+    ssh ubuntu@<public IP>
+	( like ssh ubuntu@12.34.56.78 )
         
 You in? If so, there are some things we need to install, including "node" and the node package manager, "npm"
 
@@ -125,7 +128,17 @@ FYI, you may not want to do this right now -- or ever! It will Tweet out at your
 
     twitter.com/apps
     
-Establish an app, and then generate a new token. 
+Create an app, filling out the required boxes. I'm giving this short shrift here, but take some time to look through it. A couple of tips, tho:
+
+	- You can ignore the callback part
+	- Access level should be both READ and WRITE
+	- You need to click on the link, "manage keys and access tokens"
+	- You're going to need the following long strings of characters
+		* Consumer Key
+		* Consumer Secret
+		* Access Token
+		* Access Token Secret
+	- The last two you may have to generate with a click of a button
 
 Then back to the code, put this on top, right under `request = require('request');`
 
@@ -136,6 +149,12 @@ Then back to the code, put this on top, right under `request = require('request'
     });
     var accessToken = "YOUR_TOKEN";
     var accessTokenSecret ="YOUR_TOKEN_SECRET";
+	
+Go in an change the varialbes in all caps, like YOUR_KEY, to your actual key, preserving the quotes. So:
+
+	consumerKey: '1234gibberish987moregibbersish' ...
+	
+And so on.
     
 And back below the umbrella code, add this:
 
@@ -157,6 +176,9 @@ Testing it from the command line ...
     
     node getweather.js
 
+Check your Twitter account! Did it tweet?!
+
+
 Now let's make it tweet about your umbrella. Change the weather code slightly:
 
     var umbrella_text = "";
@@ -168,11 +190,31 @@ Now let's make it tweet about your umbrella. Change the weather code slightly:
     	umbrella_text ="You can leave your umbrella at home today!"
     }
 
+Testing it from the command line ...
+    
+    node getweather.js
+	
+Did it work?
 
-##Make it happen every day at 8 a.m.
 
-From the command line:
+##Make it happen every day at 7 a.m.
+
+We're going to create a "cron job." That's a little command to run something at a particular time, or at particular intervals. It's a little cryptic, but what we want to add here is a command to execute 'node getweather.js' every day at 7 a.m.
+
+To do this, we edit the cron file from the command line:
 
     crontab -e
 
-    node /home/ubuntu/getweather.js
+Pick "nano" as your text editor.
+
+There's info in the file there about how it works. We're going to add in the following line at the end of the file:
+
+	0 7 * * * node /home/ubuntu/getweather.js
+
+Make sure you end that line with a carriage return, or it won't execute! (I have often made this mistake.)
+
+Note that we use the _full_ path for the getweather.js file, which is: `/home/ubuntu/getweather.js`
+
+Now you're set. Check it tomorrow at 7 a.m.
+
+
