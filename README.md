@@ -184,11 +184,17 @@ Now let's make it tweet about your umbrella. Change the weather code slightly:
     var umbrella_text = "";
     if (rain_chance > 0.5){
     	console.log("Bring your umbrella!");
-    	umbrella_text ="May want to bring your umbrella today!"
+    	umbrella_text ="May want to bring your umbrella today!";
     } else {
     	console.log("No umbrella needed!");
-    	umbrella_text ="You can leave your umbrella at home today!"
+    	umbrella_text ="You can leave your umbrella at home today!";
     }
+
+And let's change the tweet from "This is a test of my bot" to be `umbrella_text`, whatever it may be today.
+
+		twitter.statuses("update", {
+		        status: ummbrella_text
+		    },
 
 Testing it from the command line ...
     
